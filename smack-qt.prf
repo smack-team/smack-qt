@@ -1,0 +1,8 @@
+SMACK_PREFIX=/usr
+SMACK_INCLUDE=/usr/include/smack-qt
+SMACK_LIB=/usr/lib
+
+LIBS += -L$${SMACK_LIB}
+INCLUDEPATH += $${SMACK_INCLUDE}
+
+qtAddLibrary(smack-qt)
