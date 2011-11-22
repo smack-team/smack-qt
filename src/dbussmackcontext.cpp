@@ -28,8 +28,7 @@
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusConnectionInterface>
-#include <QtDBus/QDBusContext>
-#include <QScopedPointer>
+#include <QtCore/QScopedPointer>
 
 using namespace SmackQt;
 
@@ -52,15 +51,15 @@ DBusSmackContext::~DBusSmackContext()
 {
 }
 
-QString DBusSmackContext::getCallerSmackContext(const QDBusContext &context)
+QString DBusSmackContext::getCallerSmackContext(const QDBusMessage &message)
 {
     //Determine the name of the service that has connected to us
-    return getLabel(context.message().service());
+    return getLabel(message.service());
 }
 
-bool DBusSmackContext::hasCallerAccess(const QDBusContext &context, const QString &object, const QString &access)
+bool DBusSmackContext::hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access)
 {
-    QString subject = getLabel(context.message().service());
+    QString subject = getLabel(message.service());
 
     if (subject.isEmpty())
         return false;

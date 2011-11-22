@@ -23,9 +23,9 @@
 
 #include "smackcontextinterface.h"
 
-#include <QList>
-#include <QVariant>
-#include <QLatin1String>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtCore/QLatin1String>
 
 using namespace SmackQt;
 using namespace SmackQt::Internal;
@@ -59,4 +59,3 @@ QDBusPendingReply<QString> SmackContextInterface::getConnectionSmackContext(cons
     argumentList << qVariantFromValue(service);
     return asyncCallWithArgumentList(Constants::DBusMethod, argumentList);
 }
-

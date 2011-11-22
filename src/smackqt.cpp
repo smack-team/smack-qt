@@ -66,4 +66,3 @@ QString Smack::getSocketPeerContext(int fd)
     free(label);
     return result;
 }
-

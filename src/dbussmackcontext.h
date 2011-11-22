@@ -28,7 +28,7 @@
 
 #include <QtCore/QString>
 
-QT_FORWARD_DECLARE_CLASS(QDBusContext)
+QT_FORWARD_DECLARE_CLASS(QDBusMessage)
 
 namespace SmackQt
 {
@@ -50,12 +50,12 @@ public:
 
     /*!
       * \brief Determine the smack context of the remote end of a DBus connection.
-      * \param context The DBusContext of the connection.
+      * \param message The DBusMessage that has arrived from the connection.
       * \returns The smack context if it exists or QString() otherwise.
       *
       * \code
       *
-      * QString remoteLabel = DBusSmackContext::getCallerSmackContext(*this);
+      * QString remoteLabel = DBusSmackContext::getCallerSmackContext(this->message());
       * QString selfLabel = Smack::getOwnContext();
       *
       * if (Smack::hasAccess(remoteLabel, selfLabel, QLatin1String("W")))
@@ -66,25 +66,25 @@ public:
       *
       * \endcode
       */
-    static QString getCallerSmackContext(const QDBusContext &context);
+    static QString getCallerSmackContext(const QDBusMessage &message);
 
     /*!
       * \brief A convenience function to determine if the remote end has access to access the object.
-      * \param context The DBusContext of the connection.
+      * \param message The DBusMessage that has arrived from the connection.
       * \param object The context of the object that is being accessed.
       * \param access The type of access being requested
       * \returns true if allowed, false otherwise.
       *
-      * NB This is a convenience for a one time call, if you require to perform multiple tests against the remote context
+      * NB! This is a convenience for a one time call, if you require to perform multiple tests against the remote context
       * you should use \ref getCallerSmackContext().
       *
       * \code
-      * if (DBusSmackContext::hasCallerAccess(*this, QLatin1String("Object_Label"), QLatin1String("rw"))
+      * if (DBusSmackContext::hasCallerAccess(this->message(), QLatin1String("Object_Label"), QLatin1String("rw"))
       *     DoSomething();
       * \endcode
       *
       */
-    static bool hasCallerAccess(const QDBusContext &context, const QString &object, const QString &access);
+    static bool hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access);
 };
 
 } // namespace SmackQt

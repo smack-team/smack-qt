@@ -24,9 +24,9 @@
 #ifndef SMACKCONTEXTINTERFACE_H
 #define SMACKCONTEXTINTERFACE_H
 
-#include <QDBusAbstractInterface>
-#include <QDBusPendingReply>
-#include <QString>
+#include <QtDBus/QDBusAbstractInterface>
+#include <QtDBus/QDBusPendingReply>
+#include <QtCore/QString>
 
 namespace SmackQt
 {
