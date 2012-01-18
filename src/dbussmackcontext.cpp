@@ -32,13 +32,20 @@
 
 using namespace SmackQt;
 
-static QString getLabel(const QString &serviceName)
+static QString getLabel(const QString &serviceName, QString *error)
 {
     QScopedPointer<Internal::SmackContextInterface> smackIf(new Internal::SmackContextInterface());
     QDBusPendingReply<QString> reply = smackIf->getConnectionSmackContext(serviceName);
     reply.waitForFinished();
     if (!reply.isValid())
+    {
+        if (error)
+        {
+            error->clear();
+            error->append(reply.error().message());
+        }
         return QString();
+    }
 
     return reply.value();
 }
@@ -51,15 +58,15 @@ DBusSmackContext::~DBusSmackContext()
 {
 }
 
-QString DBusSmackContext::getCallerSmackContext(const QDBusMessage &message)
+QString DBusSmackContext::getCallerSmackContext(const QDBusMessage &message, QString *error)
 {
     //Determine the name of the service that has connected to us
-    return getLabel(message.service());
+    return getLabel(message.service(), error);
 }
 
-bool DBusSmackContext::hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access)
+bool DBusSmackContext::hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access, QString *error)
 {
-    QString subject = getLabel(message.service());
+    QString subject = getLabel(message.service(), error);
 
     if (subject.isEmpty())
         return false;

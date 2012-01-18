@@ -51,6 +51,7 @@ public:
     /*!
       * \brief Determine the smack context of the remote end of a DBus connection.
       * \param message The DBusMessage that has arrived from the connection.
+      * \param error On failure retrieve an error string indicating the problem.
       * \returns The smack context if it exists or QString() otherwise.
       *
       * \code
@@ -66,13 +67,14 @@ public:
       *
       * \endcode
       */
-    static QString getCallerSmackContext(const QDBusMessage &message);
+    static QString getCallerSmackContext(const QDBusMessage &message, QString *error = 0);
 
     /*!
       * \brief A convenience function to determine if the remote end has access to access the object.
       * \param message The DBusMessage that has arrived from the connection.
       * \param object The context of the object that is being accessed.
       * \param access The type of access being requested
+      * \param error Retrieve an error message indicating the failure if one occurs.
       * \returns true if allowed, false otherwise.
       *
       * NB! This is a convenience for a one time call, if you require to perform multiple tests against the remote context
@@ -84,7 +86,7 @@ public:
       * \endcode
       *
       */
-    static bool hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access);
+    static bool hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access, QString *error = 0);
 };
 
 } // namespace SmackQt
