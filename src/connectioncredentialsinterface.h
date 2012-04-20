@@ -21,24 +21,25 @@
  * Brian McGillion <brian.mcgillion@intel.com>
  */
 
-#ifndef SMACKCONTEXTINTERFACE_H
-#define SMACKCONTEXTINTERFACE_H
+#ifndef CONNECTIONCREDENTIALSINTERFACE_H
+#define CONNECTIONCREDENTIALSINTERFACE_H
 
 #include <QtDBus/QDBusAbstractInterface>
 #include <QtDBus/QDBusPendingReply>
 #include <QtCore/QString>
+#include <QtCore/QVariantMap>
 
 namespace SmackQt
 {
 namespace Internal
 {
 
- /*!
-   * \class SmackContextInterface
+/*!
+   * \class ConnectionCredentialsInterface
    *
    * Connect to the DBus server and query for the Smack context of a service.
    */
-class SmackContextInterface : public QDBusAbstractInterface
+class ConnectionCredentialsInterface : public QDBusAbstractInterface
 {
     Q_OBJECT
 
@@ -48,24 +49,31 @@ public:
       * \Constructor
       * \param parent The optional parent object
       */
-    explicit SmackContextInterface(QObject *parent = 0);
+    explicit ConnectionCredentialsInterface(QObject *parent = 0);
 
-  /*!
-    * \brief Destructor
-    */
-  ~SmackContextInterface();
+    /*!
+     * \brief Destructor
+     */
+    ~ConnectionCredentialsInterface();
+
+    /*!
+      * \brief Get the Smack context from the connection credentials
+      * \param credentials The hash that contains the credentials that has been retrieved from the DBus service
+      * \returns the context if it exists or QString otherwise.
+      */
+    QString getSmackContext(const QVariantMap &credentials);
 
 public Q_SLOTS: // METHODS
 
-  /*!
-    * \brief Get DBus connection Smack context
-    * \param service Service name of the remote end
-    * \returns The label of the connection if it exists
-    */
-  QDBusPendingReply<QString> getConnectionSmackContext(const QString &service);
+    /*!
+     * \brief Get DBus connection Security credentials
+     * \param service Service name of the remote end
+     * \returns All the credentials of the connection if it exists
+     */
+    QDBusPendingReply<QVariantMap> getConnectionCredentials(const QString &service);
 };
 
 } //namespace Internal
 } //namespace SmackQt
 
-#endif // SMACKCONTEXTINTERFACE_H
+#endif // CONNECTIONCREDENTIALSINTERFACE_H

@@ -22,7 +22,7 @@
  */
 
 #include "dbussmackcontext.h"
-#include "smackcontextinterface.h"
+#include "connectioncredentialsinterface.h"
 #include "smackqt.h"
 
 #include <QtDBus/QDBusMessage>
@@ -34,8 +34,8 @@ using namespace SmackQt;
 
 static QString getLabel(const QString &serviceName, QString *error)
 {
-    QScopedPointer<Internal::SmackContextInterface> smackIf(new Internal::SmackContextInterface());
-    QDBusPendingReply<QString> reply = smackIf->getConnectionSmackContext(serviceName);
+    QScopedPointer<Internal::ConnectionCredentialsInterface> smackIf(new Internal::ConnectionCredentialsInterface());
+    QDBusPendingReply<QVariantMap> reply = smackIf->getConnectionCredentials(serviceName);
     reply.waitForFinished();
     if (!reply.isValid())
     {
@@ -47,7 +47,7 @@ static QString getLabel(const QString &serviceName, QString *error)
         return QString();
     }
 
-    return reply.value();
+    return smackIf->getSmackContext(reply.value());
 }
 
 DBusSmackContext::DBusSmackContext()

@@ -12,7 +12,7 @@ DEFINES += SMACKQT_LIBRARY
 SOURCES += \
     dbussmackcontext.cpp \
     smackqt.cpp \
-    smackcontextinterface.cpp
+    connectioncredentialsinterface.cpp
 
 PUBLIC_HEADERS +=\
     dbussmackcontext.h \
@@ -22,7 +22,7 @@ PUBLIC_HEADERS +=\
     smack-qt_global.h
 
 HEADERS += $$PUBLIC_HEADERS \
-    smackcontextinterface.h
+    connectioncredentialsinterface.h
 
 SMACK_LIB_PATH = /usr/lib
 SMACK_INCLUDE_PATH = /usr/include/smack-qt

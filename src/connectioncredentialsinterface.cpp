@@ -21,7 +21,7 @@
  * Brian McGillion <brian.mcgillion@intel.com>
  */
 
-#include "smackcontextinterface.h"
+#include "connectioncredentialsinterface.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>
@@ -39,23 +39,28 @@ namespace Constants
     //! The interface the methods belongs to
     const char * const DBusInterface("org.freedesktop.DBus");
     //! The method to call to get the connection label
-    static const QLatin1String DBusMethod("GetConnectionSmackContext");
+    static const QLatin1String DBusMethod("GetConnectionCredentials");
+    //! The DBus name of the Smack credential
+    static const QLatin1String SmackContext("SmackSecurityContext");
 }
 
-SmackContextInterface::SmackContextInterface(QObject *parent)
+ConnectionCredentialsInterface::ConnectionCredentialsInterface(QObject *parent)
   : QDBusAbstractInterface(Constants::DBusService, Constants::DBusPath, Constants::DBusInterface,
                            QDBusConnection::sessionBus(), parent)
 {
 }
 
-SmackContextInterface::~SmackContextInterface()
+ConnectionCredentialsInterface::~ConnectionCredentialsInterface()
 {
 
 }
 
-QDBusPendingReply<QString> SmackContextInterface::getConnectionSmackContext(const QString &service)
+QDBusPendingReply<QVariantMap> ConnectionCredentialsInterface::getConnectionCredentials(const QString &service)
 {
-    QList<QVariant> argumentList;
-    argumentList << qVariantFromValue(service);
-    return asyncCallWithArgumentList(Constants::DBusMethod, argumentList);
+    return asyncCall(Constants::DBusMethod, QVariant::fromValue(service));
+}
+
+QString ConnectionCredentialsInterface::getSmackContext(const QVariantMap &credentials)
+{
+    return credentials.value(Constants::SmackContext, QVariant()).toString();
 }
