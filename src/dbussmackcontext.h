@@ -29,6 +29,7 @@
 #include <QtCore/QString>
 
 QT_FORWARD_DECLARE_CLASS(QDBusMessage)
+QT_FORWARD_DECLARE_CLASS(QDBusContext)
 
 namespace SmackQt
 {
@@ -87,6 +88,25 @@ public:
       *
       */
     static bool hasCallerAccess(const QDBusMessage &message, const QString &object, const QString &access, QString *error = 0);
+
+    /*!
+      * \brief Find the underlying socket file descriptor that is used by a DBus connection
+      * \param context The DBus context of the shared connection \sa QDBusContext
+      * \param error On failure retrieve an error string indicating the problem.
+      * \returns The file descriptor if it exists or -1 on error.
+      *
+      * DO NOT read or write or call select() on the returned fd, as per the libdbus1 documentation.
+      * \sa http://dbus.freedesktop.org/doc/api/html/group_DBusConnection.html
+      */
+    static int getConnectionSocketFd(const QDBusContext &context, QString *error = 0);
+
+    /*!
+      * \brief Determine the Smack Context of the other process in a DBus peer-to-peer connection
+      * \param context The DBus context of the shared connection \sa QDBusContext
+      * \param error On failure retrieve an error string indicating the problem.
+      * \returns The smack context if it exists or QString() otherwise.
+      */
+    static QString getPeerSmackContext(const QDBusContext &context, QString *error = 0);
 };
 
 } // namespace SmackQt

@@ -25,7 +25,9 @@
 #include "smackcontextinterface.h"
 #include "smackqt.h"
 
+#include <dbus/dbus.h>
 #include <QtDBus/QDBusMessage>
+#include <QtDBus/QDBusContext>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusConnectionInterface>
 #include <QtCore/QScopedPointer>
@@ -72,4 +74,34 @@ bool DBusSmackContext::hasCallerAccess(const QDBusMessage &message, const QStrin
         return false;
 
     return Smack::hasAccess(subject, object, access);
+}
+
+int SmackQt::DBusSmackContext::getConnectionSocketFd(const QDBusContext &context, QString *error)
+{
+    int fd = -1;
+    QDBusConnection conn = context.connection();
+    DBusConnection *raw_conn = conn.internalPointer();
+
+    dbus_bool_t result = dbus_connection_get_unix_fd(raw_conn, &fd);
+
+    if (!result)
+    {
+        if (error)
+        {
+            error->clear();
+            error->append("Failed to find the socket from the connection");
+            return -1;
+        }
+    }
+
+    return fd;
+}
+
+QString SmackQt::DBusSmackContext::getPeerSmackContext(const QDBusContext &context, QString *error)
+{
+    int fd = DBusSmackContext::getConnectionSocketFd(context, error);
+    if (fd < 0)
+        return QString();
+
+    return Smack::getSocketPeerContext(fd);
 }

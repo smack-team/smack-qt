@@ -3,7 +3,7 @@ TEMPLATE   = lib
 QT        += dbus
 QT        -= gui
 CONFIG    += link_pkgconfig
-PKGCONFIG += libsmack
+PKGCONFIG += libsmack dbus-1
 
 QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden
 
