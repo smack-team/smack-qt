@@ -80,7 +80,7 @@ int SmackQt::DBusSmackContext::getConnectionSocketFd(const QDBusContext &context
 {
     int fd = -1;
     QDBusConnection conn = context.connection();
-    DBusConnection *raw_conn = conn.internalPointer();
+    DBusConnection *raw_conn = reinterpret_cast<DBusConnection *>(conn.internalPointer());
 
     dbus_bool_t result = dbus_connection_get_unix_fd(raw_conn, &fd);
 
